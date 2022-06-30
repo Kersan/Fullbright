@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "fullbright",
+  "version": "${version}",
+
+  "name": "Fullbright Mod",
+  "description": "Created to help people view in Dark! Have no fear my friends!",
+  "authors": [
+    "ZawodowySpiwor3000"
+  ],
+  "contact": {
+    "homepage": "https://youtu.be/xE0CEN5azTM",
+    "sources": "https://youtu.be/xE0CEN5azTM"
+  },
+
+  "license": "MIT license",
+  "icon": "assets/fullbright/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "me.zawodowy.fullbright.FullbrightMod"
+    ],
+    "modmenu": [
+      "me.zawodowy.fullbright.configuration.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "fullbright.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "fabric": "*",
+    "minecraft": "1.16.x",
+    "java": ">=8"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
