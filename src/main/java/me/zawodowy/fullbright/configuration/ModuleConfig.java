@@ -10,4 +10,7 @@ public class ModuleConfig implements ConfigData {
     @Comment("Opóźnienie w wysyłaniu komend")
     public int delay = 1000;
 
+    @Comment("Przestaje wysyłać komendy przy wyjściu z serwera")
+    public boolean stopOnDisconnect = true;
+
 }

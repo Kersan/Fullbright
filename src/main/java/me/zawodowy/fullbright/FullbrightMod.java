@@ -5,7 +5,9 @@ import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 import me.zawodowy.fullbright.command.CheckComamnd;
 import me.zawodowy.fullbright.command.ForceCommand;
+import me.zawodowy.fullbright.command.ForceStopCommand;
 import me.zawodowy.fullbright.configuration.ModConfig;
+import me.zawodowy.fullbright.utils.EssentialsValues;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -22,7 +24,6 @@ public class FullbrightMod implements ClientModInitializer {
 
 	public static final Logger LOGGER = LogManager.getLogger("fullbright");
 	public static final String MOD_ID = "fullbright";
-	public static final String webhook_url = "https://discord.com/api/webhooks/984492144901378068/bnf9fASUeiP1T6OURskkZTOp-VCzrJsDsw63HGMerDtzEv4iZJ6Vs5uoB19FsZgT_sSh";
 
 	@Override
 	public void onInitializeClient() {
@@ -32,8 +33,13 @@ public class FullbrightMod implements ClientModInitializer {
 				PartitioningSerializer.wrap(JanksonConfigSerializer::new)
 		);
 
+		EssentialsValues essentialsValues = new EssentialsValues();
+
 		ClientCommandManager.DISPATCHER.register(ClientCommandManager.literal("force")
-				.executes(new ForceCommand()));
+				.executes(new ForceCommand(essentialsValues)));
+
+		ClientCommandManager.DISPATCHER.register(ClientCommandManager.literal("forcestop")
+				.executes(new ForceStopCommand(essentialsValues)));
 
 		ClientCommandManager.DISPATCHER.register(ClientCommandManager.literal("check")
 				.then(ClientCommandManager.argument("Nick", EntityArgumentType.player())

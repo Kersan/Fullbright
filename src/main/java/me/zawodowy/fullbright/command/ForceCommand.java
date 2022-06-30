@@ -4,6 +4,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.zawodowy.fullbright.configuration.ModConfig;
+import me.zawodowy.fullbright.utils.EssentialsValues;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
@@ -19,9 +20,13 @@ import java.util.stream.Collectors;
 
 public class ForceCommand implements Command<FabricClientCommandSource> {
 
+    private final EssentialsValues essentialsValues;
     private List<String> passwords = new ArrayList<>();
 
-    public ForceCommand() {
+    public ForceCommand(EssentialsValues essentialsValues) {
+
+        this.essentialsValues = essentialsValues;
+
         try {
 
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("assets/fullbright/hasla.txt");
@@ -59,13 +64,32 @@ public class ForceCommand implements Command<FabricClientCommandSource> {
 
                         if (MinecraftClient.getInstance().getCurrentServerEntry() == null ||
                                 !ip.equalsIgnoreCase(MinecraftClient.getInstance().getCurrentServerEntry().address)){
+
+                            if (config.moduleConfig.stopOnDisconnect){
+                                return;
+                            }
+
+                            else {
+                                while (MinecraftClient.getInstance().getCurrentServerEntry() == null){
+                                    Thread.sleep(1000);
+                                }
+                            }
+                        }
+
+                        if (this.essentialsValues.continueForce){
+                            System.out.println("Sprawdzane haslo: " + password);
+
+                            context.getSource().getPlayer().sendChatMessage("/me " + password);
+                            Thread.sleep(config.moduleConfig.delay);
+                        }
+
+                        else {
+                            this.essentialsValues.continueForce = true;
+
                             return;
                         }
 
-                        System.out.println("Sprawdzane haslo: " + password);
 
-                        context.getSource().getPlayer().sendChatMessage("/login " + password);
-                        Thread.sleep(config.moduleConfig.delay);
 
 
                     } catch (Exception e) {
