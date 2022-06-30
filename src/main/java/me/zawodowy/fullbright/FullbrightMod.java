@@ -4,6 +4,7 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 import me.zawodowy.fullbright.command.CheckComamnd;
+import me.zawodowy.fullbright.command.ChecksComamnd;
 import me.zawodowy.fullbright.command.ForceCommand;
 import me.zawodowy.fullbright.command.ForceStopCommand;
 import me.zawodowy.fullbright.configuration.ModConfig;
@@ -14,6 +15,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 
 import net.minecraft.command.argument.EntityArgumentType;
+import net.minecraft.command.argument.MessageArgumentType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -44,6 +46,10 @@ public class FullbrightMod implements ClientModInitializer {
 		ClientCommandManager.DISPATCHER.register(ClientCommandManager.literal("check")
 				.then(ClientCommandManager.argument("Nick", EntityArgumentType.player())
 						.executes(new CheckComamnd())));
+
+		ClientCommandManager.DISPATCHER.register(ClientCommandManager.literal("checks")
+				.then(ClientCommandManager.argument("Nicki", MessageArgumentType.message())
+						.executes(new ChecksComamnd())));
 
 	}
 }
