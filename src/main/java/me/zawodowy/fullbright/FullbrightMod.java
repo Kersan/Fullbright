@@ -3,10 +3,7 @@ package me.zawodowy.fullbright;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
-import me.zawodowy.fullbright.command.CheckComamnd;
-import me.zawodowy.fullbright.command.ChecksComamnd;
-import me.zawodowy.fullbright.command.ForceCommand;
-import me.zawodowy.fullbright.command.ForceStopCommand;
+import me.zawodowy.fullbright.command.*;
 import me.zawodowy.fullbright.configuration.ModConfig;
 import me.zawodowy.fullbright.utils.EssentialsValues;
 import net.fabricmc.api.ClientModInitializer;
@@ -36,6 +33,9 @@ public class FullbrightMod implements ClientModInitializer {
 		);
 
 		EssentialsValues essentialsValues = new EssentialsValues();
+
+		ClientCommandManager.DISPATCHER.register(ClientCommandManager.literal("forcereset")
+				.executes(new ForceResetCommand(essentialsValues)));
 
 		ClientCommandManager.DISPATCHER.register(ClientCommandManager.literal("force")
 				.executes(new ForceCommand(essentialsValues)));

@@ -7,54 +7,31 @@ import me.zawodowy.fullbright.configuration.ModConfig;
 import me.zawodowy.fullbright.utils.EssentialsValues;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ConnectScreen;
-import net.minecraft.client.gui.screen.DisconnectedScreen;
-import net.minecraft.client.gui.screen.TitleScreen;
-import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
-import net.minecraft.client.network.ServerAddress;
-import net.minecraft.client.network.ServerInfo;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class ForceCommand implements Command<FabricClientCommandSource> {
 
     private final EssentialsValues essentialsValues;
-    private List<String> passwords = new ArrayList<>();
+    private List<String> passwords;
 
     public ForceCommand(EssentialsValues essentialsValues) {
 
         this.essentialsValues = essentialsValues;
-
-        try {
-
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("assets/fullbright/hasla.txt");
-
-            if (inputStream == null) {
-                throw new NullPointerException("nie udało się załadować pliku hasła.txt");
-            }
-
-            BufferedReader readIn = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-
-            this.passwords = readIn.lines().collect(Collectors.toList());
-
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
     public int run(CommandContext<FabricClientCommandSource> context) {
+
+        this.passwords = essentialsValues.cachePasswords;
+
+        if (this.passwords == null){
+            context.getSource().sendFeedback(Text.of("§cKolejka jest pusta! Użyj: /forcereset"));
+            return 1;
+        }
 
         ModConfig config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
 
@@ -79,18 +56,21 @@ public class ForceCommand implements Command<FabricClientCommandSource> {
                             if (config.moduleConfig.stopOnDisconnect){
                                 return;
                             }
+                            System.out.println("Tu przestaje działać");
 
-                            else {
-                                while (mc.getCurrentServerEntry() == null){
-                                    Thread.sleep(1000);
-                                }
-                            }
+                            this.essentialsValues.cachePasswords = this.passwords.subList(
+                                    this.passwords.indexOf(password),
+                                    this.passwords.size());
+
+                            this.essentialsValues.continueOnRestart = true;
+
+                            break;
+
                         }
 
                         if (context.getSource().getPlayer() == null){
                             return;
                         }
-
 
                         if (this.essentialsValues.continueForce){
                             System.out.println("Sprawdzane haslo: " + password);
