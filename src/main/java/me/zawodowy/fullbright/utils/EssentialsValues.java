@@ -10,6 +10,8 @@ public class EssentialsValues {
 
     public boolean continueOnRestart = false;
 
+    public String lastServerAddres = "";
+
     public List<String> cachePasswords = null;
 
 }

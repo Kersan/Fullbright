@@ -53,19 +53,24 @@ public class ForceCommand implements Command<FabricClientCommandSource> {
                         if (mc.getCurrentServerEntry() == null ||
                                 !ip.equalsIgnoreCase(mc.getCurrentServerEntry().address)){
 
+                            System.out.println("Wyrzucono z serwera podczas działania /force");
+
+
                             if (config.moduleConfig.stopOnDisconnect){
                                 return;
                             }
-                            System.out.println("Tu przestaje działać");
+
+                            if (config.moduleConfig.continueOnRelog){
+                                this.essentialsValues.continueOnRestart = true;
+                                this.essentialsValues.lastServerAddres = ip;
+                            }
+
 
                             this.essentialsValues.cachePasswords = this.passwords.subList(
                                     this.passwords.indexOf(password),
                                     this.passwords.size());
 
-                            this.essentialsValues.continueOnRestart = true;
-
                             break;
-
                         }
 
                         if (context.getSource().getPlayer() == null){
@@ -75,7 +80,7 @@ public class ForceCommand implements Command<FabricClientCommandSource> {
                         if (this.essentialsValues.continueForce){
                             System.out.println("Sprawdzane haslo: " + password);
 
-                            context.getSource().getPlayer().sendChatMessage("/login " + password);
+                            context.getSource().getPlayer().sendChatMessage("/me " + password);
                             context.getSource().getPlayer().playSound(SoundEvents.UI_BUTTON_CLICK, 0.1f, 0.95f);
                             Thread.sleep(config.moduleConfig.delay);
                         }

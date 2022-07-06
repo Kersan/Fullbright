@@ -13,4 +13,6 @@ public class ModuleConfig implements ConfigData {
     @Comment("Przestaje wysyłać komendy przy wyjściu z serwera")
     public boolean stopOnDisconnect = true;
 
+    @Comment("Po relogu zaczyna wpisywać hasła z miejsca, z którego skończył.")
+    public boolean continueOnRelog = false;
 }
