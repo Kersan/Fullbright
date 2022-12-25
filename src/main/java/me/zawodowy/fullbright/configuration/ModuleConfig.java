@@ -10,9 +10,9 @@ public class ModuleConfig implements ConfigData {
     @Comment("Opóźnienie w wysyłaniu komend")
     public int delay = 1000;
 
-    @Comment("Przestaje wysyłać komendy przy wyjściu z serwera")
-    public boolean stopOnDisconnect = true;
+    @Comment("Zapamiętuje pozycję dziennika po wyrzuceniu")
+    public boolean rememberOnDisconnect = true;
 
-    @Comment("Po relogu zaczyna wpisywać hasła z miejsca, z którego skończył.")
+    @Comment("TYMCZASOWO USUNIĘTE")
     public boolean continueOnRelog = false;
 }
