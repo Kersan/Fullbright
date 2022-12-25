@@ -15,40 +15,35 @@ import java.util.stream.Collectors;
 public class ForceResetCommand implements Command<FabricClientCommandSource> {
 
     private final EssentialsValues essentialsValues;
+    private final String passwordPath;
 
     public ForceResetCommand(EssentialsValues essentialsValues) {
         this.essentialsValues = essentialsValues;
         this.essentialsValues.cachePasswords = getPasswords();
+        this.passwordPath = "assets/fullbright/hasla.txt";
     }
-
 
     @Override
     public int run(CommandContext<FabricClientCommandSource> context) {
-
         this.essentialsValues.cachePasswords = getPasswords();
-
-        System.out.println(this.essentialsValues.cachePasswords.size());
-
-        return 1;
+        return 0;
     }
-
 
     private List<String> getPasswords(){
         try {
-
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("assets/fullbright/hasla.txt");
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(this.passwordPath);
 
             if (inputStream == null) {
-                throw new NullPointerException("nie udało się załadować pliku hasła.txt");
+                throw new NullPointerException("Nie udało się załadować pliku hasła.txt");
             }
 
-            BufferedReader readIn = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+            BufferedReader readIn = new BufferedReader(inputStreamReader);
 
             return readIn.lines().collect(Collectors.toList());
 
         }catch (Exception e) {
             e.printStackTrace();
-
             return null;
         }
     }

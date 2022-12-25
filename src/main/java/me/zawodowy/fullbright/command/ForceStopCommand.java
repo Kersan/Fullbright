@@ -28,9 +28,8 @@ public class ForceStopCommand implements Command<FabricClientCommandSource> {
 
     @Override
     public int run(CommandContext<FabricClientCommandSource> context) {
-
         this.essentialsValues.continueForce = false;
 
-        return 1;
+        return 0;
     }
 }
