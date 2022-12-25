@@ -11,12 +11,10 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.argument.EntityArgumentType;
 import net.minecraft.command.argument.MessageArgumentType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 
 
 @Environment(EnvType.CLIENT)
@@ -46,44 +44,10 @@ public class FullbrightMod implements ClientModInitializer {
 
 		ClientCommandManager.DISPATCHER.register(ClientCommandManager.literal("check")
 				.then(ClientCommandManager.argument("Nick", EntityArgumentType.player())
-						.executes(new CheckComamnd())));
+						.executes(new CheckCommand())));
 
 		ClientCommandManager.DISPATCHER.register(ClientCommandManager.literal("checks")
 				.then(ClientCommandManager.argument("Nicki", MessageArgumentType.message())
-						.executes(new ChecksComamnd())));
-
-
-		new Thread(() -> {
-
-			MinecraftClient mc = MinecraftClient.getInstance();
-
-			while (mc != null){
-				if (essentialsValues.continueOnRestart && mc.getCurrentServerEntry() != null){
-
-					while (mc.player == null){
-						try {
-							Thread.sleep(1000);
-						} catch (InterruptedException e) {
-							throw new RuntimeException(e);
-						}
-					}
-
-					essentialsValues.continueOnRestart = false;
-
-					if (mc.getCurrentServerEntry().address != essentialsValues.lastServerAddres){
-						continue;
-					}
-
-					mc.player.sendChatMessage("/force");
-				}
-
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					throw new RuntimeException(e);
-				}
-			}
-
-		}).start();
+						.executes(new ChecksCommand())));
 	}
 }
